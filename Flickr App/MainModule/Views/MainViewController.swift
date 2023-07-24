@@ -123,14 +123,14 @@ final class MainViewController: UIViewController {
         view.frame = CGRect(x: .zero, y: .zero, width: self.view.frame.width, height: 44)
         view.clipsToBounds = true
         
-        self.searchBar.frame = CGRect(x: .zero, y: .zero, width: self.view.frame.width/1.25, height: 44)
+        self.searchBar.frame = CGRect(x: .zero, y: .zero, width: self.view.frame.width/1.27, height: 44)
         searchBar.delegate = self
         view.addSubview(searchBar)
         
         cancelButton.addTarget(self, action: #selector(cancelButtonAction(sender:)), for: .touchUpInside)
         cancelButton.frame = CGRect(x: self.view.frame.width/1.1 + 10, y: .zero, width: 200, height: 30)
         
-        editorButton.frame = CGRect(x: self.view.frame.width - 70, y: 4, width: 36, height: 36)
+        editorButton.frame = CGRect(x: self.view.frame.width - 76, y: 4, width: 36, height: 36)
         
         editorButton.addTarget(self, action: #selector(editorTap), for: .touchUpInside)
         
