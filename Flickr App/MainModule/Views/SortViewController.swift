@@ -76,9 +76,9 @@ final class SortViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             mainView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainView.topAnchor.constraint(equalTo: view.bottomAnchor, constant: -360),
             mainView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             mainView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            mainView.heightAnchor.constraint(equalToConstant: view.frame.height/2.3)
         ])
         
         //MARK: - constraints tableView
@@ -95,7 +95,7 @@ final class SortViewController: UIViewController {
         mainView.addSubview(closeButton)
         
         NSLayoutConstraint.activate([
-            closeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            closeButton.bottomAnchor.constraint(equalTo: tableView.bottomAnchor, constant: -20),
             closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             closeButton.widthAnchor.constraint(equalToConstant: view.frame.width - 40),
             closeButton.heightAnchor.constraint(equalToConstant: 60)
