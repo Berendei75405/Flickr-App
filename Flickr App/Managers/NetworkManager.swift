@@ -26,29 +26,25 @@ final class NetworkManager {
     
     //MARK: - fetchImage
     func fetchImage(photo: [Photo], size: String = "b", completion: @escaping (Result<[Data], Error>) -> Void) {
-        var requestsArray: [URLRequest] = []
-        for i in photo {
-            guard let url = URL(string: "https://farm\(i.farm).staticflickr.com/\(i.server)/\(i.id)_\(i.secret)_\(size).jpg") else { return }
+        var requestArray: [URLRequest] = []
+        for item in photo {
+            guard let url = URL(string: "https://farm\(item.farm).staticflickr.com/\(item.server)/\(item.id)_\(item.secret)_\(size).jpg") else { return }
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            requestsArray.append(request)
+            requestArray.append(request)
         }
-        networkService.makeRequestArrayData(request: requestsArray, completion: completion)
+        networkService.makeRequestArrayData(request: requestArray, completion: completion)
     }
     
     //MARK: - fetch flickrInfo
-    func fetchFlickrInfo(photoID: [Photo], completion: @escaping (Result<[FlickrInfo], Error>) -> Void) {
+    func fetchFlickrInfo(photoID: Photo, completion: @escaping (Result<FlickrInfo, Error>) -> Void) {
         let apiKey = "a340f6d4abf46452518a7a8ec6a42e15"
         let method = "flickr.photos.getInfo"
-        var requestsArray: [URLRequest] = []
-        for item in photoID {
-            guard let url = URL(string: "https://api.flickr.com/services/rest/?method=\(method)&api_key=\(apiKey)&photo_id=\(item.id)&format=json&nojsoncallback=1") else { return }
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            
-            requestsArray.append(request)
-        }
-        networkService.makeRequestArray(request: requestsArray, completion: completion)
+        guard let url = URL(string: "https://api.flickr.com/services/rest/?method=\(method)&api_key=\(apiKey)&photo_id=\(photoID.id)&format=json&nojsoncallback=1") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        networkService.makeRequest(request: request, completion: completion)
     }
     
 }
