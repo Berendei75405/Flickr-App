@@ -227,7 +227,7 @@ extension MainViewController: UITableViewDelegate,
     
     //MARK: - tableViewDelegate, DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.imagesData.count
+        return viewModel.flickrInfo.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,16 +252,20 @@ extension MainViewController: UITableViewDelegate,
         let font = UIFont.systemFont(ofSize: 18)
         let image = CGFloat(250)
         
-        let width = tableView.frame.width - padding * 2    // ширина строки таблицы
-        let text = viewModel.flickrInfo[indexPath.row].photo.title.content
-        let tegs = viewModel.returnTegs(index: indexPath.row)
-        let size = CGSize(width: width, height: .infinity)
-        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-        let estimatedHeight = NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: font], context: nil).height
-        
-        let estimatedHeightTegs = NSString(string: tegs).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: font], context: nil).height
-        
-        return estimatedHeight + padding * 2 + image + estimatedHeightTegs
+        if viewModel.imagesData.isEmpty {
+            return view.frame.height/2.5
+        } else {
+            let width = tableView.frame.width - padding * 2    // ширина строки таблицы
+            let text = viewModel.flickrInfo[indexPath.row].photo.title.content
+            let tegs = viewModel.returnTegs(index: indexPath.row)
+            let size = CGSize(width: width, height: .infinity)
+            let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+            let estimatedHeight = NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: font], context: nil).height
+
+            let estimatedHeightTegs = NSString(string: tegs).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: font], context: nil).height
+
+            return estimatedHeight + padding * 2 + image + estimatedHeightTegs
+        }
     }
 }
 
