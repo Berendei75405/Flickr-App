@@ -54,9 +54,13 @@ final class MainViewModel: MainViewModelProtocol {
             networkManager.fetchImage(photo: flickr.photos.photo) { result in
                 switch result {
                 case .success(let data):
-                    self.imagesData = []
-                    self.imagesData = data
-                    self.getDescription()
+                    if data.isEmpty {
+                        self.updateTableState.send(.failure)
+                    } else {
+                        self.getDescription()
+                        self.imagesData = []
+                        self.imagesData = data
+                    }
                 case .failure(let error):
                     print(error)
                     self.updateTableState.send(.failure)
