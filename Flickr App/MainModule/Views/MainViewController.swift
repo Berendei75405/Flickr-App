@@ -146,7 +146,9 @@ final class MainViewController: UIViewController {
         let errorAction = UIAlertAction(title: "Попробовать снова", style: .default) { [unowned self] _ in
             self.viewModel.fetchFlicer()
         }
+        let okAction = UIAlertAction(title: "Ок", style: .default)
         errorAlert.addAction(errorAction)
+        errorAlert.addAction(okAction)
         
         return errorAlert
     }
