@@ -50,14 +50,17 @@ final class MainViewModel: MainViewModelProtocol {
     //MARK: - getPhoto
     private func getPhoto() {
         guard let flickr = flickr else { return }
-        //получение фотографий
-        networkManager.fetchImage(photo: flickr.photos.photo) { [unowned self] imageResult in
-            switch imageResult {
-            case .success(let data):
-                self.imagesData = data
-                getDescription()    
-            case .failure(let error):
-                print(error)
+        DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
+            networkManager.fetchImage(photo: flickr.photos.photo) { result in
+                switch result {
+                case .success(let data):
+                    self.imagesData = []
+                    self.imagesData = data
+                    self.getDescription()
+                case .failure(let error):
+                    print(error)
+                    self.updateTableState.send(.failure)
+                }
             }
         }
     }
@@ -65,17 +68,27 @@ final class MainViewModel: MainViewModelProtocol {
     //MARK: - getDescription
     private func getDescription() {
         guard let flickr = flickr else { return }
-        self.networkManager.fetchFlickrInfo(photoID: flickr.photos.photo) { resultInfo in
-            
-            //обработка результатов
-            switch resultInfo {
-            case .success(let photoInfo):
-                self.flickrInfo = photoInfo
-                self.updateTableState.send(.success)
-            case .failure(let error):
-                print(error)
+        self.flickrInfo = []
+        var index = 0 {
+            didSet {
+                DispatchQueue.global(qos: .userInteractive).async { [unowned self] in
+                    if index < flickr.photos.photo.count {
+                        self.networkManager.fetchFlickrInfo(photoID: flickr.photos.photo[index]) { result in
+                            switch result {
+                            case .success(let info):
+                                self.flickrInfo.append(info)
+                                self.updateTableState.send(.success)
+                                index += 1
+                            case .failure(let error):
+                                print(error)
+                                self.updateTableState.send(.failure)
+                            }
+                        }
+                    }
+                }
             }
         }
+        index = 0
     }
     
     //MARK: - showPhotoController
